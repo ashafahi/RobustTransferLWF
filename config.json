@@ -5,7 +5,7 @@
   
 
   "_comment": "===== DATASET CONFIGURATION =====",
-  "data_path": "cifar100_data",
+  "data_path": "cifar10_data",
 
   "_comment": "===== TRAINING CONFIGURATION =====",
   "tf_random_seed": 451760341,
