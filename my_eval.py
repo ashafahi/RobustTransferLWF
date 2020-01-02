@@ -1,12 +1,7 @@
 import tensorflow as tf
 import json
 import math
-mode = "cifar_10"
 
-if mode == 'cifar_10':
-	import cifar10_input
-elif mode == 'cifar_100':
-	import cifar100_input
 from model import Model
 from pgd_attack import LinfPGDAttack
 
@@ -84,6 +79,17 @@ def my_eval(config, cifar, model, attack, sess, source):
 if __name__=='__main__':
 	with open('config.json') as config_file:
 		config = json.load(config_file)
+	if config['data_path'] == "cifar100_data":
+		mode = 'cifar_100'
+	elif config['data_path'] == "cifar10_data":
+		mode = 'cifar_10'
+	else:
+		print("mode should be either cifar_10 ro cifar_100")
+		return(1)
+	if mode == 'cifar_10':
+		import cifar10_input
+	elif mode == 'cifar_100':
+		import cifar100_input
 	if mode == 'cifar_10':
 		cifar = cifar10_input.CIFAR10Data(config['data_path'])
 	elif mode == 'cifar_100':

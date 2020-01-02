@@ -93,14 +93,10 @@ if __name__ == '__main__':
   saver = tf.train.Saver()
 
   data_path = config['data_path']
-  #cifar = cifar10_input.CIFAR10Data(data_path)
-  bad_classes = config['pretrained_model_classes']
-  if config['model_dir'] == 'models/adv_train_half':
-    bad_classes = list(set(range(100)) - set(bad_classes))
-  if config['model_dir'] == 'models/100_7stepAdvTrained':
-    bad_classes = []
-  cifar = cifar100_input.CIFAR100Data(data_path, bad_classes=bad_classes) if _CIFAR100 else cifar10_input.CIFAR10Data(data_path) 
 
+
+  cifar = cifar100_input.CIFAR100Data(data_path) if _CIFAR100 else cifar10_input.CIFAR10Data(data_path) 
+  
   with tf.Session() as sess:
     # Restore the checkpoint
     saver.restore(sess, model_file)
@@ -136,6 +132,6 @@ if __name__ == '__main__':
 
     print('Storing examples')
     path = config['store_adv_path']
-    #x_adv = np.concatenate(x_adv, axis=0)
-    #np.save(path, x_adv)
+    x_adv = np.concatenate(x_adv, axis=0)
+    np.save(path, x_adv)
     print('Examples stored in {}'.format(path))

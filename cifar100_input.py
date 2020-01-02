@@ -14,10 +14,12 @@ import pickle
 import sys
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
+import json
+import numpy as np
+
 version = sys.version_info
 
-import numpy as np
-_HALF = True
+
 
 class CIFAR100Data(object):
     """
@@ -38,28 +40,19 @@ class CIFAR100Data(object):
         arrays, and an array of their 50,000 true labels.
 
     """
-    def __init__(self, path, bad_classes):
-        #train_filenames = ['data_batch_{}'.format(ii + 1) for ii in range(5)]
+    def __init__(self, path):
         train_filename = 'train'
-        eval_filename = 'test'#'test_batch'
-        metadata_filename = 'meta'#'batches.meta'
+        eval_filename = 'test'
+        metadata_filename = 'meta'
 
         train_images = np.zeros((50000, 32, 32, 3), dtype='uint8')
         train_labels = np.zeros(50000, dtype='int32')
-        #for ii, fname in enumerate(train_filenames):
-        #    cur_images, cur_labels = self._load_datafile(os.path.join(path, fname))
-        #    train_images[ii * 10000 : (ii+1) * 10000, ...] = cur_images
-        #    train_labels[ii * 10000 : (ii+1) * 10000, ...] = cur_labels
+
         train_images, train_labels = self._load_datafile(
             os.path.join(path, train_filename))
         eval_images, eval_labels = self._load_datafile(
             os.path.join(path, eval_filename))
 
-        if _HALF:
-          train_images = np.array([i for i, l in zip(train_images, train_labels) if l not in bad_classes])
-          train_labels = np.array([l for l in train_labels if l not in bad_classes])
-          eval_images = np.array([i for i, l in zip(eval_images, eval_labels) if l not in bad_classes])
-          eval_labels = np.array([l for l in eval_labels if l not in bad_classes])
 
         with open(os.path.join(path, metadata_filename), 'rb') as fo:
               if version.major == 3:
@@ -67,7 +60,6 @@ class CIFAR100Data(object):
               else:
                   data_dict = pickle.load(fo)
 
-              #self.label_names = data_dict[b'label_names']
               self.label_names = data_dict[b'fine_label_names']
         for ii in range(len(self.label_names)):
             self.label_names[ii] = self.label_names[ii].decode('utf-8')
@@ -85,9 +77,9 @@ class CIFAR100Data(object):
 
           assert data_dict[b'data'].dtype == np.uint8
           image_data = data_dict[b'data']
-          #image_data = image_data.reshape((10000, 3, 32, 32)).transpose(0, 2, 3, 1)
+          
           image_data = image_data.reshape((-1, 3, 32, 32)).transpose(0, 2, 3, 1)
-          #return image_data, np.array(data_dict[b'labels'])
+          
           return image_data, np.array(data_dict[b'fine_labels'])
 
 class AugmentedCIFAR100Data(object):
@@ -123,37 +115,6 @@ class AugmentedCIFAR100Data(object):
                                              self.augmented)
         self.label_names = raw_cifar100data.label_names
 
-
-#class DataSubset(object):
-#    def __init__(self, xs, ys):
-#        self.xs = xs
-#        self.n = xs.shape[0]
-#        self.ys = ys
-#        self.batch_start = 0
-#        self.cur_order = np.random.permutation(self.n)
-#
-#    def get_next_batch(self, batch_size, multiple_passes=False, reshuffle_after_pass=True):
-#        if self.n < batch_size:
-#            raise ValueError('Batch size can be at most the dataset size')
-#        if not multiple_passes:
-#            actual_batch_size = min(batch_size, self.n - self.batch_start)
-#            if actual_batch_size <= 0:
-#                raise ValueError('Pass through the dataset is complete.')
-#            batch_end = self.batch_start + actual_batch_size
-#            batch_xs = self.xs[self.cur_order[self.batch_start : batch_end], ...]
-#            batch_ys = self.ys[self.cur_order[self.batch_start : batch_end], ...]
-#            self.batch_start += actual_batch_size
-#            return batch_xs, batch_ys
-#        actual_batch_size = min(batch_size, self.n - self.batch_start)
-#        if actual_batch_size < batch_size:
-#            if reshuffle_after_pass:
-#                self.cur_order = np.random.permutation(self.n)
-#            self.batch_start = 0
-#        batch_end = self.batch_start + batch_size
-#        batch_xs = self.xs[self.cur_order[self.batch_start : batch_end], ...]
-#        batch_ys = self.ys[self.cur_order[self.batch_start : batch_end], ...]
-#        self.batch_start += batch_size
-#        return batch_xs, batch_ys
 
 class DataSubset(object):
     def __init__(self, xs, ys):
