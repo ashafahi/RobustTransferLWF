@@ -8,6 +8,7 @@ import json
 import os
 import shutil
 import math
+import tqdm
 
 import tensorflow as tf
 import numpy as np
@@ -151,8 +152,7 @@ with tf.Session(config=config) as sess:
     all_raw_train_xs = raw_cifar.train_data.xs
     import math
     n_b_train = int(math.ceil(n_train/batch_size))
-    for jj in range(n_b_train):
-      print(jj)
+    for jj in tqdm(range(n_b_train)):
       start, end = get_start_end(jj,batch_size,n_train)
       these_feats = sess.run(model_feat_reps, feed_dict={model.x_input: all_raw_train_xs[start:end]})
       if jj == 0:
