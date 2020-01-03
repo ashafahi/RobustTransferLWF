@@ -85,7 +85,7 @@ if __name__=='__main__':
 		mode = 'cifar_10'
 	else:
 		print("mode should be either cifar_10 ro cifar_100")
-		return(1)
+		exit(1)
 	if mode == 'cifar_10':
 		import cifar10_input
 	elif mode == 'cifar_100':
