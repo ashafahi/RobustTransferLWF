@@ -8,7 +8,7 @@ import json
 import os
 import shutil
 import math
-import tqdm
+from tqdm import tqdm
 
 import tensorflow as tf
 import numpy as np
