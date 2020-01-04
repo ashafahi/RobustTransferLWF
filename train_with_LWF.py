@@ -25,11 +25,11 @@ with open('config.json') as config_file:
 
 
 if config['data_path'] == 'cifar10_data':
- npy_dir = '/robust_CIFAR_10_feats.npy'
+ npy_dir = 'robust_CIFAR_10_feats.npy'
  import cifar10_input
 elif config['data_path'] == 'cifar100_data':
  import cifar100_input
- npy_dir = '/robust_CIFAR_100_feat_reps.npy'
+ npy_dir = 'robust_CIFAR_100_feat_reps.npy'
 
 # seeding randomness
 tf.set_random_seed(config['tf_random_seed'])
@@ -136,7 +136,7 @@ with tf.Session(config=config) as sess:
   sess.run(global_step.initializer)
 
   print('done loading model')
-  feats_dir = data_path + npy_dir
+  feats_dir = os.path.join(data_path, npy_dir)
   if os.path.exists(feats_dir):
     print('the feature representations already exist ... moving on to training')
     sys.stdout.flush()

@@ -247,4 +247,4 @@ __pycache__/
 *.npy
 *.zip
 
-
+cifar10_data*
