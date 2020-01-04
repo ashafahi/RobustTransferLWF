@@ -20,7 +20,7 @@
   "step_size_schedule": [[0, 0.001], [10000, 0.001], [15000, 0.001]],
 
   "weight_decay": 0.0002,
-  "feat_sim": 0.0005,
+  "feat_sim": 0.005,
   "warmstart_step": 10000,
   "momentum": 0.9,
 
