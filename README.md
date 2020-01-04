@@ -6,3 +6,8 @@ Download the dataset you want to transfer to (target) and place it in its corres
 Download a an adversarially trained CIFAR model using fetch_model.py (for CIFAR100: fetch_model.py adv_trained_cifar100)
 
 run train_with_LWF.py
+
+#To transfer learn with LWF from cifar100+ -> cifar10, run the following commands:
+source download_cifar10.sh
+python fetch_model.py adv_trained_cifar100
+python train_with_LWF.py
