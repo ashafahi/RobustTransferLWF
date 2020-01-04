@@ -25,7 +25,7 @@ with open('config.json') as config_file:
 
 
 if config['data_path'] == 'cifar10_data':
- npy_dir = 'robust_CIFAR_10_feats.npy'
+ npy_dir = '/robust_CIFAR_10_feats.npy'
  import cifar10_input
 elif config['data_path'] == 'cifar100_data':
  import cifar100_input
